@@ -26,7 +26,7 @@ jobs:
       - name: Use swap-space-action
         uses: ./.github/actions/swap-space-action
         with:
-          swap-size-mb: 1024
+          swap-size-mb: 10240 # 10G
 
       - name: Determine swap space after
         run: |
@@ -39,4 +39,4 @@ jobs:
 
       - name: Assert swap space is correct
         run: |
-          test $SWAP_SPACE_AFTER = 1024
+          test $SWAP_SPACE_AFTER = 10240
