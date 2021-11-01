@@ -1,0 +1,42 @@
+name: ci
+on:
+  push:
+
+jobs:
+  test-action:
+    name: Test action
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+    steps:
+      - name: Determine swap space before
+        run: |
+          echo "SWAP_SPACE_BEFORE=$(if $(free -m | sed -n '3{p;q}' | grep -i swap &> /dev/null); then echo $(free -m | sed -n '3{p;q}' | awk '{print $2}'); else echo 0; fi;)" >> $GITHUB_ENV
+      - name: Check out swap-space-action
+        uses: actions/checkout@v2
+        with:
+          repository: get-bridge/swap-space-action
+          token: ${{ secrets.GIT_HUB_TOKEN }}
+          path: .github/actions/swap-space-action
+          ref: ${{ github.sha }}
+      - name: Use swap-space-action
+        uses: ./.github/actions/swap-space-action
+        with:
+          swap-size-mb: 1024
+
+      - name: Determine swap space after
+        run: |
+          echo "SWAP_SPACE_AFTER=$(if $(free -m | sed -n '3{p;q}' | grep -i swap &> /dev/null); then echo $(free -m | sed -n '3{p;q}' | awk '{print $2}'); else echo 0; fi;)" >> $GITHUB_ENV
+
+      - name: Print before and after swap space
+        run: |
+          echo "The swap space before action: $SWAP_SPACE_BEFORE"
+          echo "The swap space after action: $SWAP_SPACE_AFTER"
+
+      - name: Assert swap space is correct
+        run: |
+          test $SWAP_SPACE_AFTER = 1024
