@@ -7,7 +7,7 @@ inputs:
   swap-size-mb:
     description: 'Swap space to create, in Megabytes'
     required: false
-    default: '4096'
+    default: '8096'
 runs:
   using: "composite"
   steps:
