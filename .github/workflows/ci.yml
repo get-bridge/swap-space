@@ -37,6 +37,6 @@ jobs:
           echo "The swap space before action: $SWAP_SPACE_BEFORE"
           echo "The swap space after action: $SWAP_SPACE_AFTER"
 
-      - name: Assert swap space is correct
+      - name: Assert swap space is within range
         run: |
-          test $SWAP_SPACE_AFTER = 10240
+          test $SWAP_SPACE_AFTER -ge 10230 -a $SWAP_SPACE_AFTER -le 10240
