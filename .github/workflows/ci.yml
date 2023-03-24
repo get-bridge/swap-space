@@ -25,7 +25,7 @@ jobs:
         run: |
           echo "SWAP_SPACE_BEFORE=$(if $(free -m | sed -n '3{p;q}' | grep -i swap &> /dev/null); then echo $(free -m | sed -n '3{p;q}' | awk '{print $2}'); else echo 0; fi;)" >> $GITHUB_ENV
       - name: Check out swap-space-action
-        uses: actions/checkout@v3.4.0
+        uses: actions/checkout@v3.5.0
         with:
           repository: get-bridge/swap-space-action
           token: ${{ secrets.GIT_HUB_TOKEN }}
