@@ -1,4 +1,4 @@
-name: ci
+name: Test
 
 on:
   push:
@@ -10,8 +10,8 @@ on:
     types: [labeled]
 
 jobs:
-  test-action:
-    name: Test action
+  test:
+    name: Test
     if: contains(github.event.pull_request.labels.*.name, 'dependencies') || github.event_name == 'push'
     runs-on: ${{ matrix.os }}
 
@@ -24,15 +24,15 @@ jobs:
       - name: Determine swap space before
         run: |
           echo "SWAP_SPACE_BEFORE=$(if $(free -m | sed -n '3{p;q}' | grep -i swap &> /dev/null); then echo $(free -m | sed -n '3{p;q}' | awk '{print $2}'); else echo 0; fi;)" >> $GITHUB_ENV
-      - name: Check out swap-space-action
+      - name: Check out swap-space
         uses: actions/checkout@v3.5.1
         with:
-          repository: get-bridge/swap-space-action
-          token: ${{ secrets.GIT_HUB_TOKEN }}
-          path: .github/actions/swap-space-action
+          repository: get-bridge/swap-space
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: .github/actions/swap-space
           ref: ${{ github.sha }}
-      - name: Use swap-space-action
-        uses: ./.github/actions/swap-space-action
+      - name: Use swap-space
+        uses: ./.github/actions/swap-space
         with:
           swap-size-mb: 10240 # 10G
 
