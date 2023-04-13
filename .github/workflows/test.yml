@@ -30,6 +30,7 @@ jobs:
           repository: get-bridge/swap-space
           token: ${{ secrets.GITHUB_TOKEN }}
           path: .github/actions/swap-space
+          persist-credentials: false
           ref: ${{ github.sha }}
       - name: Use swap-space
         uses: ./.github/actions/swap-space
